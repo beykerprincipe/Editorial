@@ -9,12 +9,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,6 +56,9 @@ public class Listar extends javax.swing.JFrame {
         tblLibros = new javax.swing.JTable();
         cboAtributo = new javax.swing.JComboBox<>();
         lblResultadoCount = new javax.swing.JLabel();
+        btnCrearArchivo = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        lblResultadoCount1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +77,7 @@ public class Listar extends javax.swing.JFrame {
             }
         });
 
-        btnnuevo.setText("Nuevo");
+        btnnuevo.setText("Nuevo libro");
         btnnuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnnuevoActionPerformed(evt);
@@ -112,6 +118,18 @@ public class Listar extends javax.swing.JFrame {
         lblResultadoCount.setText(" ");
         lblResultadoCount.setToolTipText("");
 
+        btnCrearArchivo.setText("Crear archivo TXT");
+        btnCrearArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearArchivoActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Borrar libro");
+
+        lblResultadoCount1.setText(" ");
+        lblResultadoCount1.setToolTipText("");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,21 +138,29 @@ public class Listar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(326, 326, 326)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnconsultar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnnuevo)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblResultadoCount))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(326, 326, 326)
-                        .addComponent(jLabel1)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCrearArchivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cboAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnconsultar)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblResultadoCount1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblResultadoCount)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -146,12 +172,17 @@ public class Listar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnnuevo)
                     .addComponent(btnconsultar)
                     .addComponent(cboAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblResultadoCount))
+                    .addComponent(lblResultadoCount)
+                    .addComponent(lblResultadoCount1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCrearArchivo)
+                    .addComponent(jButton1)
+                    .addComponent(btnnuevo))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -233,6 +264,43 @@ public class Listar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnconsultarActionPerformed
 
+    private void btnCrearArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearArchivoActionPerformed
+
+        try {
+            FileOutputStream archivo = new FileOutputStream(new File("editorial.txt"), false);
+            OutputStreamWriter w = new OutputStreamWriter(archivo, "UTF-8");
+
+            DefaultTableModel model = (DefaultTableModel) this.tblLibros.getModel();
+
+            if (model != null) {
+                int rows = model.getRowCount();
+                String isbn;
+                String titulo;
+                String autor;
+                String anio;
+                String editorial;
+
+                for (int i = 0; i < rows; i++) {
+                    isbn = model.getValueAt(i, 6).toString();
+                    titulo = model.getValueAt(i, 4).toString();
+                    autor = model.getValueAt(i, 5).toString();
+                    anio = model.getValueAt(i, 10).toString();
+                    editorial = model.getValueAt(i, 9).toString();
+                    w.write(isbn.trim() + "|" + titulo.trim() + "|" + autor.trim() + "|" + anio.trim() + "|" + editorial.trim() + "\n");
+                }
+
+                w.flush();
+                w.close();
+
+                JOptionPane.showMessageDialog(null, "Archivo creado correctamente dentro de la carpeta del proyecto", "Editorial", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+    }//GEN-LAST:event_btnCrearArchivoActionPerformed
+
     private void cargarDatos() {
         File file = new File("editorial.txt");
         try {
@@ -303,13 +371,16 @@ public class Listar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCrearArchivo;
     private javax.swing.JButton btnconsultar;
     private javax.swing.JButton btnnuevo;
     private javax.swing.JComboBox<String> cboAtributo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblResultadoCount;
+    private javax.swing.JLabel lblResultadoCount1;
     private javax.swing.JTable tblLibros;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
