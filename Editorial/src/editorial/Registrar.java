@@ -7,10 +7,21 @@ package editorial;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -267,6 +278,61 @@ public class Registrar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
+        String file_name = "archivo.xlsx";
+
+        try {
+            FileInputStream file = new FileInputStream(new File(file_name));
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            int num = sheet.getLastRowNum();
+
+            Object fila[] = new Object[13];
+            fila[0] = num;
+            fila[1] = this.txtPrincipal.getText().trim();
+            fila[2] = this.txtSubnivel1.getText().trim();
+            fila[3] = this.txtSubnivel2.getText().trim();
+            fila[4] = this.txtTitulo.getText().trim();
+            fila[5] = this.txtAutor.getText().trim();
+            fila[6] = this.txtISBN.getText().trim();
+            fila[7] = this.txtIdioma.getText().trim();
+            fila[8] = this.txtEdicion.getText().trim();
+            fila[9] = this.txtEditorial.getText().trim();
+            fila[10] = this.txtAnio.getText().trim();
+            fila[11] = this.txtEjemplar.getText().trim();
+            fila[12] = this.txtTipo.getText().trim();
+
+            Row row = sheet.createRow(sheet.getLastRowNum());
+            for (int i = 0; i < fila.length; i++) {
+                Cell cell = row.createCell(i);
+                cell.setCellValue(fila[i].toString());
+            }
+
+            File file2 = new File("archivo.xlsx");
+            try (FileOutputStream fileOuS = new FileOutputStream(file2)) {
+                if (file2.exists()) {
+                    file2.delete();
+                }
+                workbook.write(fileOuS);
+                fileOuS.flush();
+                fileOuS.close();
+
+                JOptionPane.showMessageDialog(null, "Datos guardados correctamente en el Excel", "Editorial", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar en el Excel, archivo no existe", "Editorial", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar en el Excel", "Editorial", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Listar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Listar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnguardarActionPerformed
+
+    public void guardarTexto() {
         try {
             // datos
             String isbn = txtISBN.getText();
@@ -280,10 +346,12 @@ public class Registrar extends javax.swing.JFrame {
             w.write(isbn.trim() + "|" + titulo.trim() + "|" + autor.trim() + "|" + anio.trim() + "|" + editorial.trim() + "\n");
             w.flush();
             w.close();
+            JOptionPane.showMessageDialog(null, "Archivo creado correctamente", "Editorial", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-    }//GEN-LAST:event_btnguardarActionPerformed
+    }
 
     /**
      * @param args the command line arguments
